@@ -1,0 +1,138 @@
+<div class="app-page">
+  <div class="header">
+    <div class="time-zone-select">
+      <form autocomplete="off">
+        <div class="form-group">
+          <input class="form-control" id="zones-list" name="zones-list" placeholder="Select zone..." data-bs-toggle="dropdown" aria-expanded="false" [(ngModel)]="zoneInput" />
+          <ul class="dropdown-menu zones-list">
+            @if (zoneInput.length) {
+              @defer {
+                @for (zone of zones | textFilter: zoneInput; track $index) {
+                  <li>
+                    <a class="dropdown-item" type="button" (click)="addZone(zone)">{{ zone }}</a>
+                  </li>
+                }
+              }
+            } @else {
+              <div class="p-3 d-flex justify-content-center aligne-items-center">Enter zone in search</div>
+            }
+          </ul>
+        </div>
+      </form>
+    </div>
+    <div class="options">
+      @if (this.savedZones.length > 1) {
+        <div class="option">
+          <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#reOrderZones" aria-controls="reOrderZones" (click)="openZoneReorder()">Reorder Zones</button>
+        </div>
+      }
+      <div class="option">
+        <div class="dropdown">
+          <a class="btn btn-outline-secondary dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false"> {{ theme === "light" ? "Light" : "Dark" }} </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" (click)="updateTheme('light')">Light</a></li>
+            <li><a class="dropdown-item" (click)="updateTheme('dark')">Dark</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="body">
+    <div class="row m-0">
+      <div class="col-xl-3 col-lg-4 col-sm-6 mb-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="clock-layout">
+              <div class="clock-header">
+                <div class="clock-title">
+                  <h4><span class="badge text-bg-primary">UTC</span></h4>
+                </div>
+              </div>
+              <div class="clock-body">
+                <div class="clock-date">
+                  {{ getTime().format("DD-MM-YYYY") }}
+                </div>
+                <div class="clock-time">
+                  {{ getTime().format("HH:mm:ss") }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      @defer {
+        @for (zone of savedZones; track zone) {
+          <div class="col-xl-3 col-lg-4 col-sm-6 mb-3">
+            <div class="card">
+              <div class="card-body">
+                <div class="clock-layout">
+                  <div class="clock-header">
+                    <div class="clock-title">
+                      <h4>
+                        <span class="badge text-bg-primary">{{ zone }}</span>
+                      </h4>
+                    </div>
+                    <div class="clock-option">
+                      <i class="fa-regular fa-trash-can" data-bs-toggle="modal" data-bs-target="#deleteConfirmation" (click)="confirmationToRemoveZone(zone)"></i>
+                    </div>
+                  </div>
+                  <div class="clock-body">
+                    <div class="clock-date">
+                      {{ getTime(zone).format("DD-MM-YYYY") }}
+                    </div>
+                    <div class="clock-time">
+                      {{ getTime(zone).format("HH:mm:ss") }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      }
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteConfirmation" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="m-3 p-3">
+          <div class="d-flex justify-content-center align-items-center">
+            <h3>
+              Delete <b>{{ zoneToDelete }}</b
+              >?
+            </h3>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" (click)="removeZone()">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="reOrderZones" aria-labelledby="reorderZoneLabel" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="reorderZoneLabel">Reorder</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <ul class="list-group">
+      <li class="list-group-item disabled" aria-disabled="true">UTC</li>
+      @for (zone of zonesToReorder; track zone) {
+        <li class="list-group-item list-item cursor-move">
+          {{ zone }}
+        </li>
+      }
+    </ul>
+  </div>
+  <div class="offcanvas-footer text-end p-2">
+    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="offcanvas">Cancel</button>
+    <button type="button" class="btn btn-primary ms-2" data-bs-dismiss="offcanvas" (click)="updateZoneReorder()">Update</button>
+  </div>
+</div>

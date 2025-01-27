@@ -1,0 +1,82 @@
+.app-page {
+    padding: 0px 10px;
+
+    .header {
+        height: var(--header-height);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0px 12px;
+
+        .options {
+            display: flex;
+            align-items: center;
+
+            .option {
+                &:not(:last-child) {
+                    margin-right: 10px;
+                }
+            }
+        }
+    }
+
+    .body {
+        height: var(--page-height);
+        padding: 10px 0px;
+        overflow-y: auto;
+    }
+}
+
+.clock-layout {
+    .clock-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+
+        .clock-option {
+            i {
+                transition: .3s ease all;
+                cursor: pointer;
+
+                &:hover {
+                    transition: .3s ease all;
+                    color: var(--bs-red);
+                }
+            }
+        }
+    }
+
+    .clock-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        .clock-date {
+            font-size: 35px;
+        }
+
+        .clock-time {
+            font-size: 50px;
+        }
+    }
+}
+
+.zones-list {
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
+.cursor-move {
+    cursor: move;
+}
+
+.list-item {
+    cursor: grab;
+}
+
+.list-item:active {
+    cursor: grabbing;
+    background-color: #e9ecef;
+}
