@@ -1,4 +1,22 @@
 :root {
     --header-height: 60px;
-    --page-height:calc(100vh - var(--header-height));
+    --page-height: calc(100vh - var(--header-height));
+}
+
+[data-app-theme="light"] {
+    --app-scroll-bg: #e7e7e7;
+    --app-scroll-color: #bdbdbd;
+
+    --list-sort-active-bg: #e9ecef;
+    --list-border: #ccc;
+    --list-bg: #fff;
+}
+
+[data-app-theme="dark"] {
+    --app-scroll-bg: #3e3e3e;
+    --app-scroll-color: #737373;
+
+    --list-sort-active-bg: #515152;
+    --list-border: #727272;
+    --list-bg: #282828;
 }

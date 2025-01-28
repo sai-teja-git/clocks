@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import moment from "moment-timezone"
 import { TextFilterPipe } from './pipes/filter.pipe';
+import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-root',
@@ -10,6 +11,7 @@ import { TextFilterPipe } from './pipes/filter.pipe';
     CommonModule,
     FormsModule,
     TextFilterPipe,
+    DragDropModule
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
@@ -45,6 +47,7 @@ export class AppComponent {
     this.theme = value;
     document.body.setAttribute("data-bs-theme", value)
     document.body.setAttribute("data-app-theme", value)
+    sessionStorage.setItem("theme", value)
   }
 
   addZone(zone: string) {
@@ -76,13 +79,13 @@ export class AppComponent {
     this.zonesToReorder = localStorage.getItem("saved_zones") ? JSON.parse(localStorage.getItem("saved_zones") as string) : [];
   }
 
-  onDrop(event: any): void {
-    console.log('event', event)
-    const previousIndex = event.previousIndex;
-    const currentIndex = event.currentIndex;
+  clearAllZones() {
+    this.savedZones = [];
+    this.updateLocalStorage()
+  }
 
-    // const itemToMove = this.zonesToReorder.splice(previousIndex, 1)[0];
-    // this.zonesToReorder.splice(currentIndex, 0, itemToMove);
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.zonesToReorder, event.previousIndex, event.currentIndex);
   }
 
   updateZoneReorder() {

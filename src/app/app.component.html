@@ -14,7 +14,7 @@
                 }
               }
             } @else {
-              <div class="p-3 d-flex justify-content-center aligne-items-center">Enter zone in search</div>
+              <div class="p-3 d-flex justify-content-center aligne-items-center">Enter text to search zone</div>
             }
           </ul>
         </div>
@@ -22,6 +22,9 @@
     </div>
     <div class="options">
       @if (this.savedZones.length > 1) {
+        <div class="option">
+          <button type="button" class="btn" (click)="clearAllZones()">Clear All Zones</button>
+        </div>
         <div class="option">
           <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#reOrderZones" aria-controls="reOrderZones" (click)="openZoneReorder()">Reorder Zones</button>
         </div>
@@ -122,14 +125,13 @@
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
   <div class="offcanvas-body">
-    <ul class="list-group">
-      <li class="list-group-item disabled" aria-disabled="true">UTC</li>
-      @for (zone of zonesToReorder; track zone) {
-        <li class="list-group-item list-item cursor-move">
-          {{ zone }}
-        </li>
-      }
-    </ul>
+    <div class="list-block">
+      <div cdkDropList class="example-list" cdkDragBoundary=".list-block" (cdkDropListDropped)="drop($event)">
+        @for (zone of zonesToReorder; track zone) {
+          <div class="example-box" cdkDrag>{{ zone }}</div>
+        }
+      </div>
+    </div>
   </div>
   <div class="offcanvas-footer text-end p-2">
     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="offcanvas">Cancel</button>
